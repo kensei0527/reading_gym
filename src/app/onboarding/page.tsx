@@ -1,11 +1,11 @@
-// src/app/onboarding/page.tsx (デバッグ版)
-
+// src/app/onboarding/page.tsx (修正後)
 'use client'
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { useRouter } from 'next/navigation'
 import type { User } from '@supabase/supabase-js'
+import type { Tables } from '@/types/supabase'
 
 const INTEREST_OPTIONS = ['Technology', 'Business', 'Science', 'Health', 'Sports', 'Entertainment']
 
@@ -13,24 +13,41 @@ export default function OnboardingPage() {
   const router = useRouter()
   const supabase = createClient()
   const [user, setUser] = useState<User | null>(null)
+  const [profile, setProfile] = useState<Tables<'profiles'> | null>(null) // ★ プロフィール情報を保持
+  const [isLoading, setIsLoading] = useState(true); // ★ ローディング状態を追加
 
-  useEffect(() => {
-    const checkUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        setUser(user)
-        // デバッグ用: ユーザーIDを確認
-        console.log('Current user ID:', user.id)
-      } else {
-        router.push('/login')
-      }
-    }
-    checkUser()
-  }, [supabase, router])
-
+  // ★ フォームのstate定義。初期値は空やデフォルト値。
   const [learningGoal, setLearningGoal] = useState('')
   const [interests, setInterests] = useState<string[]>([])
   const [academicLevel, setAcademicLevel] = useState(3)
+
+  // ★ ページ読み込み時にユーザーとプロフィール情報を取得
+  useEffect(() => {
+    const getData = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        setUser(user)
+        // ログインユーザーに紐づくプロフィールを取得
+        const { data: profileData } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('user_id', user.id)
+          .single()
+        
+        if (profileData) {
+          setProfile(profileData)
+          // ★ 取得したプロフィール情報でフォームの初期値を設定
+          setLearningGoal(profileData.learning_goal || '')
+          setInterests(profileData.interests || [])
+          setAcademicLevel(profileData.academic_level || 3)
+        }
+      } else {
+        router.push('/login')
+      }
+      setIsLoading(false); // ★ ローディング完了
+    }
+    getData()
+  }, [supabase, router])
 
   const handleInterestChange = (interest: string) => {
     setInterests(prev =>
@@ -43,59 +60,60 @@ export default function OnboardingPage() {
   const handleSubmit = async () => {
     if (!user) return
 
-    // デバッグ用: 送信するデータを確認
-    const profileData = {
+    const { error } = await supabase.from('profiles').upsert({
       user_id: user.id,
       learning_goal: learningGoal,
       interests: interests,
       academic_level: academicLevel,
+    },
+    {
+      onConflict: 'user_id',
     }
-    console.log('Submitting profile data:', profileData)
-
-    const { data, error } = await supabase.from('profiles').upsert(profileData)
+  )
 
     if (error) {
-      // より詳細なエラー情報を表示
-      console.error('Supabase error:', error)
-      alert(`エラーが発生しました: ${error.message}\nDetails: ${error.details || 'No additional details'}`)
+      alert('エラーが発生しました: ' + error.message)
     } else {
-      console.log('Profile saved successfully:', data)
       alert('プロフィールを保存しました！')
       router.push('/')
     }
   }
 
-  if (!user) {
+  // ★ ローディング中は専用の表示を出す
+  if (isLoading) {
     return <div>Loading...</div>
   }
-
+  
   return (
     <div className="container mx-auto max-w-2xl py-12">
-      <h1 className="text-3xl font-bold mb-8">ようこそ、{user.email} さん</h1>
-      <p className="mb-8 text-gray-600">学習をパーソナライズするために、いくつか質問させてください。</p>
+      <h1 className="text-3xl font-bold mb-8">プロフィール設定</h1>
+      <p className="mb-8 text-gray-600">
+        {profile ? '設定を変更できます。' : '学習をパーソナライズするために、いくつか質問させてください。'}
+      </p>
       
-      {/* デバッグ情報表示 */}
-      <div className="mb-4 p-4 bg-gray-100 rounded text-sm">
-        <strong>Debug Info:</strong><br/>
-        User ID: {user.id}<br/>
-        Email: {user.email}
-      </div>
-
       <div className="space-y-8">
+        {/* 学習目的のセレクトボックス */}
         <div>
           <label htmlFor="learningGoal" className="block text-lg font-medium mb-2">
-            1. あなたの英語学習の目的は何ですか？
+            1. あなたの英語学習の主な目的は何ですか？
           </label>
-          <input
-            type="text"
+          <select
             id="learningGoal"
             value={learningGoal}
             onChange={(e) => setLearningGoal(e.target.value)}
-            className="w-full p-2 border rounded-md"
-            placeholder="例: TOEFLで100点取る、海外の技術ブログを読む"
-          />
+            className="w-full p-2 border rounded-md bg-white"
+          >
+            <option value="" disabled>選択してください</option>
+            <option value="TOEIC">TOEIC対策</option>
+            <option value="TOEFL">TOEFL対策</option>
+            <option value="IELTS">IELTS対策</option>
+            <option value="EIKEN">英検対策</option>
+            <option value="Business">ビジネス英語</option>
+            <option value="DailyConversation">日常英会話</option>
+            <option value="General">一般的な読解力向上</option>
+          </select>
         </div>
-
+        {/* ... 興味分野とアカデミック度のフォーム部分は変更なし ... */}
         <div>
           <label className="block text-lg font-medium mb-2">
             2. どんな分野の話題に興味がありますか？ (複数選択可)
@@ -114,7 +132,6 @@ export default function OnboardingPage() {
             ))}
           </div>
         </div>
-
         <div>
           <label htmlFor="academicLevel" className="block text-lg font-medium mb-2">
             3. 読みたい記事の雰囲気を教えてください (1: カジュアル 〜 5: アカデミック)
@@ -139,7 +156,7 @@ export default function OnboardingPage() {
           onClick={handleSubmit}
           className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg text-lg"
         >
-          保存して始める
+          プロフィールを保存する
         </button>
       </div>
     </div>

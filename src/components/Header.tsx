@@ -31,9 +31,13 @@ export default async function Header() {
         <nav>
           {user ? (
             <div className="flex items-center gap-4">
-              <span>{user.email}</span>
+              <span className="text-sm hidden sm:inline">{user.email}</span>
+              {/* ★ プロフィール設定ページへのリンクを追加 */}
+              <Link href="/onboarding" className="text-sm hover:underline">
+                プロフィール設定
+              </Link>
               <form action={signOut}>
-                <button className="bg-red-500 hover:bg-red-600 px-3 py-1 rounded">
+                <button className="bg-red-500 hover:bg-red-600 px-3 py-1 rounded text-sm">
                   Logout
                 </button>
               </form>

@@ -1,5 +1,4 @@
-// src/components/Generator.tsx (修正版)
-
+// src/components/Generator.tsx (修正後)
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -17,6 +16,8 @@ export default function Generator({ profile }: { profile: Tables<'profiles'> }) 
   const [userAnswers, setUserAnswers] = useState<string[]>([])
   const [showResults, setShowResults] = useState(false)
   const [score, setScore] = useState(0)
+
+  // ... (useEffect, formatTime などの関数は変更なし)
 
   useEffect(() => {
     let interval: NodeJS.Timeout
@@ -38,11 +39,15 @@ export default function Generator({ profile }: { profile: Tables<'profiles'> }) 
     setIsLearningMode(true)
     setIsTimerRunning(true)
     setTimer(0)
-    setUserAnswers([])
+    // ★ 問題数に合わせて解答欄を初期化
+    if(generatedContent && 'questions' in generatedContent) {
+      setUserAnswers(Array(generatedContent.questions.length).fill(''))
+    }
     setShowResults(false)
   }
 
   const handleAnswerChange = (questionIndex: number, answer: string) => {
+    if (showResults) return
     const newAnswers = [...userAnswers]
     newAnswers[questionIndex] = answer
     setUserAnswers(newAnswers)
@@ -52,7 +57,8 @@ export default function Generator({ profile }: { profile: Tables<'profiles'> }) 
     setIsTimerRunning(false)
     let correctCount = 0
     generatedContent && 'questions' in generatedContent && generatedContent.questions.forEach((q, index) => {
-      if (userAnswers[index] === q.answer) {
+      // ★ 正誤判定を少し柔軟に（大文字小文字、前後の空白を無視）
+      if (userAnswers[index] && q.answer.trim().toLowerCase() === userAnswers[index].trim().toLowerCase()) {
         correctCount++
       }
     })
@@ -64,6 +70,8 @@ export default function Generator({ profile }: { profile: Tables<'profiles'> }) 
     e.preventDefault()
     setIsLoading(true)
     setGeneratedContent(null)
+    setIsLearningMode(false) // ★
+    setShowResults(false) // ★
     
     const content = await generateContentAction(profile, duration)
     setGeneratedContent(content)
@@ -71,40 +79,99 @@ export default function Generator({ profile }: { profile: Tables<'profiles'> }) 
     setIsLoading(false)
   }
 
+  // ★ 問題タイプに応じてUIを出し分ける関数
+  const renderQuestion = (q: any, index: number) => {
+    const isCorrect = showResults && userAnswers[index] && q.answer.trim().toLowerCase() === userAnswers[index].trim().toLowerCase();
+    const isIncorrect = showResults && userAnswers[index] && q.answer.trim().toLowerCase() !== userAnswers[index].trim().toLowerCase();
+
+    switch (q.type) {
+      case 'multiple-choice':
+        return (
+          <div className="mt-2 space-y-2">
+            {q.choices.map((choice: string) => (
+              <label key={choice} className={`block p-2 rounded-md border-2 transition-colors ${showResults ? '' : 'cursor-pointer hover:bg-gray-100'} ${userAnswers[index] === choice ? 'bg-blue-100 border-blue-400' : 'bg-white'} ${showResults && (q.answer === choice ? '!bg-green-100 !border-green-500' : userAnswers[index] === choice ? '!bg-red-100 !border-red-500' : '')}`}>
+                <input
+                  type="radio"
+                  name={`question-${index}`}
+                  value={choice}
+                  checked={userAnswers[index] === choice}
+                  onChange={(e) => handleAnswerChange(index, e.target.value)}
+                  className="sr-only"
+                  disabled={showResults}
+                />
+                <span>{choice}</span>
+              </label>
+            ))}
+          </div>
+        );
+      case 'true-false-not-given':
+        return (
+          <div className="mt-2 space-y-2">
+            {['True', 'False', 'Not Given'].map((choice) => (
+              <label key={choice} className={`block p-2 rounded-md border-2 transition-colors ${showResults ? '' : 'cursor-pointer hover:bg-gray-100'} ${userAnswers[index] === choice ? 'bg-blue-100 border-blue-400' : 'bg-white'} ${showResults && (q.answer === choice ? '!bg-green-100 !border-green-500' : userAnswers[index] === choice ? '!bg-red-100 !border-red-500' : '')}`}>
+                <input
+                  type="radio"
+                  name={`question-${index}`}
+                  value={choice}
+                  checked={userAnswers[index] === choice}
+                  onChange={(e) => handleAnswerChange(index, e.target.value)}
+                  className="sr-only"
+                  disabled={showResults}
+                />
+                <span>{choice}</span>
+              </label>
+            ))}
+          </div>
+        );
+      case 'fill-in-the-blank':
+        return (
+          <div className="mt-2">
+            <input
+              type="text"
+              value={userAnswers[index] || ''}
+              onChange={(e) => handleAnswerChange(index, e.target.value)}
+              disabled={showResults}
+              className={`p-1 border rounded-md w-32 text-center ${showResults && (isCorrect ? 'bg-green-100 border-green-500' : isIncorrect ? 'bg-red-100 border-red-500' : '')}`}
+              placeholder="答えを入力"
+            />
+          </div>
+        );
+      default:
+        return <p>Unsupported question type</p>;
+    }
+  }
+
   return (
     <div>
-      <form onSubmit={handleSubmit} className="flex items-center gap-4 mb-6">
-        <div>
-          <label htmlFor="duration" className="block font-medium">学習時間 (分)</label>
-          <select 
-            id="duration"
-            value={duration} 
-            onChange={(e) => setDuration(Number(e.target.value))}
-            className="p-2 border rounded-md"
-          >
-            <option value={15}>15</option>
-            <option value={30}>30</option>
-            <option value={60}>60</option>
-          </select>
-        </div>
-        <button 
-          type="submit" 
-          disabled={isLoading}
-          className="self-end bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg disabled:bg-gray-400"
-        >
-          {isLoading ? '生成中...' : '教材を生成する'}
-        </button>
-      </form>
-      
-      {generatedContent && 'text' in generatedContent && !isLearningMode && (
+      {/* フォーム部分は変更なし */}
+      {!isLearningMode && (
+        <form onSubmit={handleSubmit} className="flex items-center gap-4 mb-6">
+          <div>
+            <label htmlFor="duration" className="block font-medium">学習時間 (分)</label>
+            <select
+              id="duration"
+              value={duration}
+              onChange={(e) => setDuration(Number(e.target.value))}
+              className="p-2 border rounded-md"
+            >
+              <option value={15}>15</option>
+              <option value={30}>30</option>
+              <option value={60}>60</option>
+            </select>
+          </div>
+          <button type="submit" disabled={isLoading} className="self-end bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg disabled:bg-gray-400">
+            {isLoading ? '生成中...' : '教材を生成する'}
+          </button>
+        </form>
+      )}
+
+      {isLoading && <p>AIが教材を生成中です...</p>}
+
+      {generatedContent && 'text' in generatedContent && !isLearningMode && !isLoading && (
         <div className="bg-white p-6 rounded-lg shadow-md animate-fade-in">
           <h3 className="text-2xl font-bold mb-4 border-b pb-2">教材の準備が完了しました</h3>
           <p className="text-gray-700 mb-6">学習を開始すると、本文と問題が表示されます。</p>
-          
-          <button
-            onClick={handleStartLearning}
-            className="mt-6 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg"
-          >
+          <button onClick={handleStartLearning} className="mt-6 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg">
             学習を開始する
           </button>
         </div>
@@ -116,67 +183,64 @@ export default function Generator({ profile }: { profile: Tables<'profiles'> }) 
             <h3 className="text-2xl font-bold">学習モード</h3>
             <div className="text-xl font-mono">{formatTime(timer)}</div>
           </div>
-
           <div className="mb-8">
             <h4 className="text-xl font-bold mb-4 border-b pb-2">本文</h4>
             <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">{generatedContent.text}</p>
           </div>
           
           <h3 className="text-2xl font-bold mb-4 border-b pb-2">問題</h3>
-          <ul className="space-y-4">
+          <ul className="space-y-6">
             {generatedContent.questions.map((q, index) => (
               <li key={index} className="bg-gray-50 p-4 rounded-md">
-                <p className="font-semibold">{index + 1}. {q.question}</p>
-                <ul className="mt-2 space-y-2">
-                  {q.choices.map(choice => (
-                    <li key={choice}>
-                      <label className="flex items-center space-x-2">
-                        <input
-                          type="radio"
-                          name={`question-${index}`}
-                          value={choice}
-                          checked={userAnswers[index] === choice}
-                          onChange={(e) => handleAnswerChange(index, e.target.value)}
-                          className="form-radio"
-                          disabled={showResults}
-                        />
-                        <span>{choice}</span>
-                      </label>
-                    </li>
-                  ))}
-                </ul>
+                {/* ★ 問題文の表示もタイプによって変える */}
+                <p className="font-semibold">{index + 1}. {
+                  q.type === 'true-false-not-given' ? q.statement :
+                  q.type === 'multiple-choice' ? q.question :
+                  `${q.question_text_before_blank}_____${q.question_text_after_blank}`
+                }</p>
+                {/* ★ 問題形式に応じてUIをレンダリング */}
+                {renderQuestion(q, index)}
+
                 {showResults && (
-                  <div className={`mt-2 text-sm font-bold ${userAnswers[index] === q.answer ? 'text-green-600' : 'text-red-600'}`}>
-                    {userAnswers[index] === q.answer ? '正解' : `不正解 (正解: ${q.answer})`}
+                  <div className={`mt-4 p-3 rounded-md ${userAnswers[index] && q.answer.trim().toLowerCase() === userAnswers[index].trim().toLowerCase() ? 'bg-green-50' : 'bg-red-50'}`}>
+                    <p className="font-bold text-sm">{userAnswers[index] && q.answer.trim().toLowerCase() === userAnswers[index].trim().toLowerCase() ? '正解！' : '不正解'}</p>
+                    {q.type === 'fill-in-the-blank' && userAnswers[index] && q.answer.trim().toLowerCase() !== userAnswers[index].trim().toLowerCase() && <p className="text-sm">正解は: <strong>{q.answer}</strong></p>}
+                    <p className="text-sm text-gray-800 mt-1">{q.explanation}</p>
                   </div>
                 )}
               </li>
             ))}
           </ul>
-
+          
+          {/* ... ここから下の結果表示部分は変更なし ... */}
           {!showResults && (
-            <button
-              onClick={handleSubmitAnswers}
-              className="mt-6 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg"
-            >
-              回答を提出する
+            <button onClick={handleSubmitAnswers} className="mt-6 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg">
+              答え合わせをする
             </button>
           )}
-
           {showResults && (
-            <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-              <h4 className="text-xl font-bold mb-2">結果</h4>
-              <p className="text-lg">
-                正解数: {score} / {generatedContent.questions.length}
-              </p>
-              <p className="text-lg">
-                所要時間: {formatTime(timer)}
-              </p>
-              <button
-                onClick={() => setIsLearningMode(false)}
-                className="mt-4 bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg"
-              >
-                学習を終了する
+            <div className="mt-8">
+              <div className="p-4 bg-gray-100 rounded-lg">
+                <h4 className="text-xl font-bold mb-2">結果</h4>
+                <p className="text-lg">正解数: {score} / {generatedContent.questions.length}</p>
+                <p className="text-lg">所要時間: {formatTime(timer)}</p>
+              </div>
+              {generatedContent.vocabulary && (
+                <div className="mt-8">
+                  <h3 className="text-2xl font-bold mb-4 border-b pb-2">Key Vocabulary</h3>
+                  <dl className="space-y-4">
+                    {generatedContent.vocabulary.map((vocab, index) => (
+                      <div key={index} className="bg-gray-50 p-4 rounded-md">
+                        <dt className="font-bold text-lg text-gray-800">{vocab.word}</dt>
+                        <dd className="text-gray-600 mt-1">{vocab.definition}</dd>
+                        <dd className="text-gray-500 italic mt-2">"{vocab.example}"</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </div>
+              )}
+              <button onClick={() => setIsLearningMode(false)} className="mt-8 w-full bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg">
+                別の教材を生成する
               </button>
             </div>
           )}

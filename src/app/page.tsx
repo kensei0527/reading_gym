@@ -31,8 +31,8 @@ export default async function HomePage() {
 
   return (
     <div className="container mx-auto max-w-4xl py-8">
-      <h1 className="text-2xl font-bold mb-4">教材ジェネレーター</h1>
-      <p className="mb-6">あなたの設定に基づいて、パーソナライズされた教材を生成します。</p>
+      <h1 className="text-2xl font-bold mb-4">Wide Reading Gym</h1>
+      <p className="mb-6">あなたの設定に基づいて、パーソナライズされた多読用の教材を生成します。あくまで多読用なのでとにかく量をこなして基礎的な読解力や速読力を身に付けたいという方向けです。</p>
       
       <div className="bg-gray-100 p-4 rounded-lg mb-6">
         <h2 className="font-bold">現在の設定</h2>
