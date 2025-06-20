@@ -1,6 +1,6 @@
 // src/utils/supabase/server.ts (修正後)
 
-import { createServerClient, type CookieOptions } from '@supabase/ssr'
+import { createServerClient } from '@supabase/ssr' // ★ CookieOptions を削除
 import { cookies } from 'next/headers'
 
 export async function createClient() {
@@ -22,7 +22,7 @@ export async function createClient() {
             cookiesToSet.forEach(({ name, value, options }) =>
               cookieStore.set(name, value, options)
             )
-          } catch (error) {
+          } catch (_error) {
             // Server Componentからのcookie設定エラーは無視
             // この処理はRoute HandlerやServer Actionで実行される場合に有効
           }

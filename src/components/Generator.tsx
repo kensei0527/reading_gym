@@ -3,7 +3,14 @@
 
 import { useState, useEffect } from 'react'
 import type { Tables } from '@/types/supabase'
-import { generateContentAction, type GeneratedContent } from '@/actions/generateContent'
+import { 
+  generateContentAction, 
+  type GeneratedContent,
+  type MultipleChoiceQuestion,
+  type TrueFalseNotGivenQuestion,
+  type FillInTheBlankQuestion
+} from '@/actions/generateContent'
+type Question = MultipleChoiceQuestion | TrueFalseNotGivenQuestion | FillInTheBlankQuestion;
 
 // Generatorコンポーネントの定義
 export default function Generator({ profile }: { profile: Tables<'profiles'> }) {
@@ -80,7 +87,7 @@ export default function Generator({ profile }: { profile: Tables<'profiles'> }) 
   }
 
   // ★ 問題タイプに応じてUIを出し分ける関数
-  const renderQuestion = (q: any, index: number) => {
+  const renderQuestion = (q: Question, index: number) => {
     const isCorrect = showResults && userAnswers[index] && q.answer.trim().toLowerCase() === userAnswers[index].trim().toLowerCase();
     const isIncorrect = showResults && userAnswers[index] && q.answer.trim().toLowerCase() !== userAnswers[index].trim().toLowerCase();
 
@@ -136,8 +143,9 @@ export default function Generator({ profile }: { profile: Tables<'profiles'> }) 
             />
           </div>
         );
-      default:
-        return <p>Unsupported question type</p>;
+        default:
+          // @ts-ignore
+          return <p>Unsupported question type: {q.type}</p>;
     }
   }
 

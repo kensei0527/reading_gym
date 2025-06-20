@@ -5,7 +5,7 @@ import type { Tables } from '@/types/supabase'
 import { createClient } from '@/utils/supabase/server' // ★ Supabaseクライアントをインポート
 
 // ★ AIからの応答の型定義を、多様な問題形式に対応できるように拡張
-type MultipleChoiceQuestion = {
+export type MultipleChoiceQuestion = {
   type: 'multiple-choice';
   question: string;
   choices: string[];
@@ -13,14 +13,14 @@ type MultipleChoiceQuestion = {
   explanation: string;
 }
 
-type TrueFalseNotGivenQuestion = {
+export type TrueFalseNotGivenQuestion = {
   type: 'true-false-not-given';
   statement: string; // T/F/NGを判断すべき記述
   answer: 'True' | 'False' | 'Not Given';
   explanation: string;
 }
 
-type FillInTheBlankQuestion = {
+export type FillInTheBlankQuestion = {
   type: 'fill-in-the-blank';
   question_text_before_blank: string; // 空欄の前の文章
   question_text_after_blank: string;  // 空欄の後の文章
