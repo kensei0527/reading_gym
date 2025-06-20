@@ -146,7 +146,7 @@ export default function Generator({ profile }: { profile: Tables<'profiles'> }) 
           </div>
         );
         default:
-          // @ts-expect-error
+          // @ts-expect-error Exhaustive switch case handling
           return <p>Unsupported question type: {q.type}</p>;
     }
   }
