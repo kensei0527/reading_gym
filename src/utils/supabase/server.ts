@@ -22,9 +22,8 @@ export async function createClient() {
             cookiesToSet.forEach(({ name, value, options }) =>
               cookieStore.set(name, value, options)
             )
-          } catch (_error) {
-            // Server Componentからのcookie設定エラーは無視
-            // この処理はRoute HandlerやServer Actionで実行される場合に有効
+          } catch (error) {
+            console.error('Cookie setting error:', error);
           }
         },
       },

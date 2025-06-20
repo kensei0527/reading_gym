@@ -144,7 +144,7 @@ export default function Generator({ profile }: { profile: Tables<'profiles'> }) 
           </div>
         );
         default:
-          // @ts-ignore
+          // @ts-expect-error
           return <p>Unsupported question type: {q.type}</p>;
     }
   }

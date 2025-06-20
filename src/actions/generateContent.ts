@@ -4,6 +4,8 @@
 import type { Tables } from '@/types/supabase'
 import { createClient } from '@/utils/supabase/server' // ★ Supabaseクライアントをインポート
 
+export type { Tables };
+
 // ★ AIからの応答の型定義を、多様な問題形式に対応できるように拡張
 export type MultipleChoiceQuestion = {
   type: 'multiple-choice';
