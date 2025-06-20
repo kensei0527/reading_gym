@@ -63,12 +63,14 @@ export default function Generator({ profile }: { profile: Tables<'profiles'> }) 
   const handleSubmitAnswers = () => {
     setIsTimerRunning(false)
     let correctCount = 0
-    generatedContent && 'questions' in generatedContent && generatedContent.questions.forEach((q, index) => {
-      // ★ 正誤判定を少し柔軟に（大文字小文字、前後の空白を無視）
-      if (userAnswers[index] && q.answer.trim().toLowerCase() === userAnswers[index].trim().toLowerCase()) {
-        correctCount++
-      }
-    })
+    // 修正方法2: if文を使用（推奨）
+    if (generatedContent && 'questions' in generatedContent) {
+      generatedContent.questions.forEach((q, index) => {
+        if (userAnswers[index] && q.answer.trim().toLowerCase() === userAnswers[index].trim().toLowerCase()) {
+          correctCount++
+        }
+      })
+    }
     setScore(correctCount)
     setShowResults(true)
   }
@@ -241,7 +243,7 @@ export default function Generator({ profile }: { profile: Tables<'profiles'> }) 
                       <div key={index} className="bg-gray-50 p-4 rounded-md">
                         <dt className="font-bold text-lg text-gray-800">{vocab.word}</dt>
                         <dd className="text-gray-600 mt-1">{vocab.definition}</dd>
-                        <dd className="text-gray-500 italic mt-2">"{vocab.example}"</dd>
+                        <dd className="text-gray-500 italic mt-2">&quot;{vocab.example}&quot;</dd>
                       </div>
                     ))}
                   </dl>
