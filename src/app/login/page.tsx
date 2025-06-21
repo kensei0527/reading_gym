@@ -28,7 +28,7 @@ export default function LoginPage() {
         <Auth
           supabaseClient={supabase}
           appearance={{ theme: ThemeSupa }}
-          providers={['google', 'github']} // ソーシャルログインを使わない場合はこの行を削除
+          providers={['google']} // ソーシャルログインを使わない場合はこの行を削除
           redirectTo={`${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`}
         />
       </div>

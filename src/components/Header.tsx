@@ -3,6 +3,7 @@
 import { createClient } from '@/utils/supabase/server'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
+import Image from 'next/image'
 
 export default async function Header() {
   // サーバーコンポーネントでSupabaseクライアントを作成
@@ -25,9 +26,18 @@ export default async function Header() {
   return (
     <header className="bg-gray-800 text-white shadow-md">
       <div className="container mx-auto p-4 flex justify-between items-center">
-        <Link href="/" className="text-xl font-bold">
+      <Link href="/" className="flex items-center gap-3">
+        <Image
+          src="/logo.png" // public/logo.png を参照
+          alt="Personalized Reading Gym Logo"
+          width={64}
+          height={64}
+          className="h-16 w-16" // サイズを指定
+        />
+        <span className="text-xl font-bold">
           Personalized Reading Gym
-        </Link>
+        </span>
+      </Link>
         <nav>
           {user ? (
             <div className="flex items-center gap-4">
