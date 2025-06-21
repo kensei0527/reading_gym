@@ -18,8 +18,8 @@ export const metadata: Metadata = {
   title: "Personalized Reading Gym", // ★ アプリ名に合わせてタイトルも変更
   description: "AI that generates English reading materials tailored to you.", // ★ 説明文も変更
   icons: { // ★ アイコン設定を追加
-    icon: "/logo.png",
-    apple: "/logo.png", // Appleデバイス用のアイコンも指定
+    icon: "/favicon.ico", // ★ パスを標準の名前に合わせる
+    apple: "/favicon.ico", // apple用も合わせておく
   },
 };
 
