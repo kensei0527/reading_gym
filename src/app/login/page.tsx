@@ -14,7 +14,7 @@ export default function LoginPage() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (session) {
         // ユーザーがログインしたら、ホームページにリダイレクト
-        window.location.href = '/'
+        window.location.href = '/dashboard'
       }
     })
 

@@ -1,48 +1,52 @@
-// src/app/page.tsx (修正後)
+// src/app/page.tsx (新しいランディングページ)
 
+import Link from 'next/link'
 import { createClient } from '@/utils/supabase/server'
-import { redirect } from 'next/navigation'
-import Generator from '@/components/Generator'
 
-export default async function HomePage() {
-  const supabase = await createClient() // ★ awaitを追加
-
-  // ログインしているユーザー情報を取得
+export default async function LandingPage() {
+  const supabase = await createClient()
   const {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // 未ログインならログインページにリダイレクト
-  if (!user) {
-    return redirect('/login')
-  }
-
-  // ユーザーのプロフィール情報を取得
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('user_id', user.id)
-    .single()
-
-  // プロフィールがまだ作成されていなければ、オンボーディングページにリダイレクト
-  if (!profile) {
-    return redirect('/onboarding')
-  }
-
   return (
-    <div className="container mx-auto max-w-4xl py-8">
-      <h1 className="text-2xl font-bold mb-4">Wide Reading Gym</h1>
-      <p className="mb-6">あなたの設定に基づいて、パーソナライズされた多読用の教材を生成します。あくまで多読用なのでとにかく量をこなして基礎的な読解力や速読力を身に付けたいという方向けです。</p>
+    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-100px)] text-center">
+      <h1 className="text-4xl md:text-6xl font-extrabold mb-4">
+        AIが、あなただけの英語教材を。
+      </h1>
+      <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl">
+        Personalized Reading Gymへようこそ。あなたの学習目的、レベル、興味に合わせて、AIが無限にリーディング教材を生成。もう教材選びに迷う必要はありません。
+      </p>
       
-      <div className="bg-gray-100 p-4 rounded-lg mb-6">
-        <h2 className="font-bold">現在の設定</h2>
-        <p>学習目的: {profile.learning_goal || '未設定'}</p>
-        <p>興味分野: {profile.interests?.join(', ') || '未設定'}</p>
-        <p>アカデミック度: {profile.academic_level || '未設定'}</p>
+      <div className="flex gap-4">
+        {user ? (
+          <Link href="/dashboard" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg text-lg">
+            ダッシュボードへ
+          </Link>
+        ) : (
+          <Link href="/login" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg text-lg">
+            無料で学習を始める
+          </Link>
+        )}
       </div>
 
-      {/* 教材生成を行うクライアントコンポーネントを呼び出す */}
-      <Generator profile={profile} />
+      <div className="mt-20 w-full max-w-4xl">
+        <h2 className="text-3xl font-bold mb-8 border-b pb-4">機能紹介</h2>
+        <div className="grid md:grid-cols-3 gap-8 text-left">
+          <div className="bg-gray-50 p-6 rounded-lg">
+            <h3 className="text-xl font-semibold mb-2">完全パーソナライズ</h3>
+            <p className="text-gray-600">TOEIC、IELTSなどの試験対策から、ビジネス、趣味の話題まで。あなたのプロフィールに合わせて、最適な英文と問題をAIが作成します。</p>
+          </div>
+          <div className="bg-gray-50 p-6 rounded-lg">
+            <h3 className="text-xl font-semibold mb-2">多様な問題形式</h3>
+            <p className="text-gray-600">4択問題だけでなく、True/False/Not Given、空所補充など、あなたの学習目的に合わせた形式の問題で、実践的な読解力を養います。</p>
+          </div>
+          <div className="bg-gray-50 p-6 rounded-lg">
+            <h3 className="text-xl font-semibold mb-2">詳細なフィードバック</h3>
+            <p className="text-gray-600">解答後すぐに、詳しい解説と重要単語リストで復習できます。タイマー機能を使えば、本番さながらの緊張感で学習可能です。</p>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

@@ -75,7 +75,7 @@ export default function OnboardingPage() {
       alert('エラーが発生しました: ' + error.message)
     } else {
       alert('プロフィールを保存しました！')
-      router.push('/')
+      router.push('/dashboard')
     }
   }
 
