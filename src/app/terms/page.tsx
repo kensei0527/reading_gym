@@ -14,7 +14,7 @@ export default function TermsPage() {
             <li>犯罪行為に関連する行為</li>
             {/* ... 他の項目を追加 ... */}
           </ul>
-          <p className="pt-4">（2025年XX月XX日 制定）</p>
+          <p className="pt-4">（2025年06月23日 制定）</p>
         </div>
       </div>
     )

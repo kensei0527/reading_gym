@@ -50,7 +50,7 @@ export default function LandingPage() {
           AIが、あなただけの英語教材を。
         </h1>
         <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl">
-          Personalized Reading Gymへようこそ。あなたの学習目的、レベル、興味に合わせて、AIが無限にリーディング教材を生成。もう教材選びに迷う必要はありません。
+          Personalized Reading Gymへようこそ。あなたの学習目的、レベル、興味に合わせて、AIが無限に多読用リーディング教材を生成。もう教材選びに迷う必要はありません。
         </p>
         
         <div className="flex gap-4">
@@ -63,7 +63,7 @@ export default function LandingPage() {
       
       {/* 特徴紹介セクション (以前のコードとほぼ同じ) */}
       <div className="w-full max-w-4xl mx-auto py-20">
-        <h2 className="text-3xl font-bold mb-8 border-b pb-4 text-center">機能紹介</h2>
+        <h2 className="text-3xl font-bold mb-8 border-b pb-4 text-center">機能</h2>
         <div className="grid md:grid-cols-3 gap-8 text-left">
           <div className="bg-gray-50/50 backdrop-blur-sm p-6 rounded-lg border">
             <h3 className="text-xl font-semibold mb-2">パーソナライズ</h3>

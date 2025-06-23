@@ -12,6 +12,54 @@ import {
 } from '@/actions/generateContent'
 type Question = MultipleChoiceQuestion | TrueFalseNotGivenQuestion | FillInTheBlankQuestion;
 
+// ★ 見本表示用のコンポーネントを新しく定義
+const GeneratorPlaceholder = () => {
+  return (
+    <div className="mt-8 p-6 bg-slate-50 border-2 border-dashed rounded-lg animate-fade-in">
+      <h2 className="text-xl font-bold text-center text-gray-500 mb-6">ここに、あなただけの教材が生成されます</h2>
+      
+      <div className="space-y-6 opacity-60">
+        {/* --- ダミーの英文 --- */}
+        <div>
+          <h3 className="text-lg font-semibold mb-2 text-gray-700">【例】生成される英文</h3>
+          <p className="text-gray-600 p-4 bg-white rounded-md shadow-sm">
+            Recent advancements in generative AI have significantly impacted various industries. For instance, in the creative sector, artists and writers are now using AI tools to brainstorm ideas and even co-create content. This synergy between human creativity and artificial intelligence is paving the way for unprecedented forms of expression.
+          </p>
+        </div>
+
+        {/* --- ダミーの問題と解説 --- */}
+        <div>
+          <h3 className="text-lg font-semibold mb-2 text-gray-700">【例】生成される問題</h3>
+          <div className="bg-white p-4 rounded-md shadow-sm">
+            <p className="font-semibold">1. What is a major impact of generative AI mentioned in the text?</p>
+            <ul className="list-disc list-inside mt-2 space-y-1 text-gray-600">
+              <li>It has decreased the need for human creativity.</li>
+              <li>It is creating new ways of expression through human-AI synergy.</li>
+              <li>It is primarily used in the technology sector.</li>
+              <li>It has had no significant impact on industries.</li>
+            </ul>
+            <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
+              <p className="font-bold text-sm">解説</p>
+              <p className="text-sm text-gray-700 mt-1">本文には "synergy between human creativity and artificial intelligence is paving the way for unprecedented forms of expression."（人間の創造性とAIの相乗効果が、前例のない表現形式への道を開いている）とあり、2番目の選択肢が正解です。</p>
+            </div>
+          </div>
+        </div>
+        
+        {/* --- ダミーの単語リスト --- */}
+        <div>
+          <h3 className="text-lg font-semibold mb-2 text-gray-700">【例】重要単語リスト</h3>
+          <div className="bg-white p-4 rounded-md shadow-sm">
+            <dl>
+              <dt className="font-bold text-gray-800">advancements</dt>
+              <dd className="text-gray-600 mt-1">progress or development in a particular field.</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // Generatorコンポーネントの定義
 export default function Generator({ profile }: { profile: Tables<'profiles'> | null }) {
   const [duration, setDuration] = useState(15)
@@ -191,7 +239,11 @@ export default function Generator({ profile }: { profile: Tables<'profiles'> | n
         </form>
       )}
 
-      {isLoading && <p>AIが教材を生成中です...</p>}
+      {/* ローディング中の表示 */}
+      {isLoading && <div className="text-center p-8">AIが教材を生成中です...</div>}
+
+      {/* ★ まだ何も生成されておらず、ローディング中でもない場合にプレースホルダーを表示 */}
+      {!isLoading && !generatedContent && <GeneratorPlaceholder />}
 
       {generatedContent && 'text' in generatedContent && !isLearningMode && !isLoading && (
         <div className="bg-white p-6 rounded-lg shadow-md animate-fade-in">
