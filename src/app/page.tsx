@@ -54,15 +54,10 @@ export default function LandingPage() {
         </p>
         
         <div className="flex gap-4">
-          {user ? (
-            <Link href="/dashboard" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg text-lg">
-              ダッシュボードへ
-            </Link>
-          ) : (
-            <Link href="/login" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg text-lg">
-              無料で学習を始める
-            </Link>
-          )}
+          {/* ★ ログイン状態に関わらず、常にダッシュボードへリンクするボタンに変更 */}
+          <Link href="/dashboard" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg text-lg">
+            {user ? 'ダッシュボードへ' : '無料で教材生成を試す'}
+          </Link>
         </div>
       </div>
       
