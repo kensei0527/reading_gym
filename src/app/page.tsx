@@ -66,7 +66,7 @@ export default function LandingPage() {
         <h2 className="text-3xl font-bold mb-8 border-b pb-4 text-center">機能紹介</h2>
         <div className="grid md:grid-cols-3 gap-8 text-left">
           <div className="bg-gray-50/50 backdrop-blur-sm p-6 rounded-lg border">
-            <h3 className="text-xl font-semibold mb-2">完全パーソナライズ</h3>
+            <h3 className="text-xl font-semibold mb-2">パーソナライズ</h3>
             <p className="text-gray-600">TOEIC、IELTSなどの試験対策から、ビジネス、趣味の話題まで。あなたのプロフィールに合わせて、最適な英文と問題をAIが作成します。</p>
           </div>
           <div className="bg-gray-50/50 backdrop-blur-sm p-6 rounded-lg border">
