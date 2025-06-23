@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header"; // ★この行を追加
+import Footer from "@/components/Footer"; // ★ この行を追加
 import Script from "next/script"; // ★ next/script をインポート
 
 const geistSans = Geist({
@@ -34,11 +35,12 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Header /> {/* ★この行を追加 */}
-        <main className="container mx-auto p-4">{children}</main> {/* ★この行を少し変更 */}
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <div className="flex flex-col min-h-screen">
+          <Header />
+          <main className="container mx-auto p-4 flex-grow">{children}</main>
+          <Footer />
+        </div>
       </body>
     </html>
   );
