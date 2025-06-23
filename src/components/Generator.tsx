@@ -13,7 +13,7 @@ import {
 type Question = MultipleChoiceQuestion | TrueFalseNotGivenQuestion | FillInTheBlankQuestion;
 
 // Generatorコンポーネントの定義
-export default function Generator({ profile }: { profile: Tables<'profiles'> }) {
+export default function Generator({ profile }: { profile: Tables<'profiles'> | null }) {
   const [duration, setDuration] = useState(15)
   const [isLoading, setIsLoading] = useState(false)
   const [generatedContent, setGeneratedContent] = useState<GeneratedContent | null>(null)
@@ -75,6 +75,22 @@ export default function Generator({ profile }: { profile: Tables<'profiles'> }) 
     setShowResults(true)
   }
 
+  // ★ ゲスト（未ログイン）ユーザー用のデフォルトプロフィールを定義
+  const guestProfile: Tables<'profiles'> = {
+    user_id: 'guest',
+    learning_goal: 'General',
+    interests: ['Technology', 'Science'],
+    academic_level: 3,
+    // 以下はDBのスキーマに合わせる
+    id: 0, 
+    created_at: new Date().toISOString(),
+    generation_count: 0,
+    last_generation_date: null,
+  };
+
+  // ★ ログインしていればユーザーのプロフィールを、していなければゲスト用プロフィールを使用
+  const effectiveProfile = profile || guestProfile;
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsLoading(true)
@@ -82,7 +98,7 @@ export default function Generator({ profile }: { profile: Tables<'profiles'> }) 
     setIsLearningMode(false) // ★
     setShowResults(false) // ★
     
-    const content = await generateContentAction(profile, duration)
+    const content = await generateContentAction(effectiveProfile, duration)
     setGeneratedContent(content)
     
     setIsLoading(false)

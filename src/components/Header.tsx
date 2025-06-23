@@ -38,23 +38,22 @@ export default async function Header() {
           Personalized Reading Gym
         </span>
       </Link>
-        <nav>
+        <nav className="flex items-center gap-4">
           {user ? (
-            <div className="flex items-center gap-4">
+            <>
               <span className="text-sm hidden sm:inline">{user.email}</span>
-              {/* ★ プロフィール設定ページへのリンクを追加 */}
               <Link href="/onboarding" className="text-sm hover:underline">
-                プロフィール設定
+                設定
               </Link>
               <form action={signOut}>
-                <button className="bg-red-500 hover:bg-red-600 px-3 py-1 rounded text-sm">
+                <button className="bg-gray-600 hover:bg-gray-700 px-3 py-1 rounded text-sm">
                   Logout
                 </button>
               </form>
-            </div>
+            </>
           ) : (
             <Link href="/login" className="bg-blue-500 hover:bg-blue-600 px-3 py-1 rounded">
-              Login
+              ログイン / 新規登録
             </Link>
           )}
         </nav>
