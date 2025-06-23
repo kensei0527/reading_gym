@@ -40,7 +40,7 @@ const GeneratorPlaceholder = () => {
             </ul>
             <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
               <p className="font-bold text-sm">解説</p>
-              <p className="text-sm text-gray-700 mt-1">本文には "synergy between human creativity and artificial intelligence is paving the way for unprecedented forms of expression."（人間の創造性とAIの相乗効果が、前例のない表現形式への道を開いている）とあり、2番目の選択肢が正解です。</p>
+              <p className="text-sm text-gray-700 mt-1">本文には 「synergy between human creativity and artificial intelligence is paving the way for unprecedented forms of expression.」（人間の創造性とAIの相乗効果が、前例のない表現形式への道を開いている）とあり、2番目の選択肢が正解です。</p>
             </div>
           </div>
         </div>
