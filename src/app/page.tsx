@@ -86,13 +86,13 @@ export default function LandingPage() {
               英語試験（TOEIC, IELTS, TOEFL, 英検）のリーディング問題の特徴と対策
             </Link>
             {/* TODO: 多読の有用性に関する記事へのリンクをここに追加 */}
-            {/* <Link href="/reading-benefits" className="block text-blue-500 hover:underline text-lg">
+            <Link href="/reading-benefits" className="block text-blue-500 hover:underline text-lg">
               多読が英語学習にもたらす驚くべき効果とは？
-            </Link> */}
+            </Link>
             {/* TODO: アプリが提供する生成教材の詳しい説明に関する記事へのリンクをここに追加 */}
-            {/* <Link href="/generated-materials-details" className="block text-blue-500 hover:underline text-lg">
+            <Link href="/generated-materials-details" className="block text-blue-500 hover:underline text-lg">
               AIが生成するパーソナライズ教材の秘密
-            </Link> */}
+            </Link>
           </div>
         </div>
         {/* ★ ここまで追加 */}
