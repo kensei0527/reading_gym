@@ -29,13 +29,13 @@ export default async function Header() {
       <Link href="/" className="flex items-center gap-3">
         <Image
           src="/logo.png" // public/logo.png を参照
-          alt="Personalized Reading Gym Logo"
+          alt="My Reading Gym Logo"
           width={64}
           height={64}
           className="h-16 w-16" // サイズを指定
         />
         <span className="text-xl font-bold">
-          Personalized Reading Gym
+          My Reading Gym
         </span>
       </Link>
         <nav className="flex items-center gap-4">

@@ -13,7 +13,7 @@ export default function Footer() {
           <Link href="/privacy" className="hover:underline">プライバシーポリシー</Link>
           <Link href="/contact" className="hover:underline">お問い合わせ</Link>
         </nav>
-        <p>&copy; {currentYear} Personalized Reading Gym. All Rights Reserved.</p>
+        <p>&copy; {currentYear} My Reading Gym. All Rights Reserved.</p>
       </div>
     </footer>
   )

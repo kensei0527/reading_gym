@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Personalized Reading Gym", // ★ アプリ名に合わせてタイトルも変更
+  title: "My Reading Gym", // ★ アプリ名に合わせてタイトルも変更
   description: "AI that generates English reading materials tailored to you.", // ★ 説明文も変更
   
 };

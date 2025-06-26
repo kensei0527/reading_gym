@@ -5,7 +5,7 @@ export default function ExamFeaturesPage() {
   return (
     <div className="max-w-4xl mx-auto py-12 px-4">
       <h1 className="text-3xl font-bold mb-8 text-center">
-        Personalized Reading Gymが対応する英語試験の特徴と対策
+        My Reading Gymが対応する英語試験の特徴と対策
       </h1>
 
       <section className="mb-10">
@@ -19,7 +19,7 @@ export default function ExamFeaturesPage() {
           <h3 className="text-xl font-medium mb-2">特徴的な問題形式と対策</h3>
           <ul className="list-disc list-inside space-y-1">
             <li>
-              <strong>Part 5: 短文穴埋め問題</strong> - 文法知識と語彙力が問われます。Personalized Reading Gymの「空所補充 (fill-in-the-blank)」問題は、このパートの対策に役立ちます。AIが文脈に合った適切な単語を生成することで、実用的な語彙力を養えます。
+              <strong>Part 5: 短文穴埋め問題</strong> - 文法知識と語彙力が問われます。My Reading Gymの「空所補充 (fill-in-the-blank)」問題は、このパートの対策に役立ちます。AIが文脈に合った適切な単語を生成することで、実用的な語彙力を養えます。
             </li>
             <li>
               <strong>Part 6: 長文穴埋め問題</strong> - 文脈理解と適切な語句・文の選択が必要です。本アプリの「空所補充」や「4択問題 (multiple-choice)」を通じて、長文読解の中での文脈判断力を高めることができます。
@@ -42,7 +42,7 @@ export default function ExamFeaturesPage() {
           <h3 className="text-xl font-medium mb-2">特徴的な問題形式と対策</h3>
           <ul className="list-disc list-inside space-y-1">
             <li>
-              <strong>True/False/Not Given (T/F/NG)</strong> - 英文の内容と与えられた記述が「合致する」「合致しない」「本文中に記載がない」を判断します。Personalized Reading Gymの「True/False/Not Given」問題は、IELTS対策に特化した訓練を提供し、正確な情報特定能力を鍛えます。
+              <strong>True/False/Not Given (T/F/NG)</strong> - 英文の内容と与えられた記述が「合致する」「合致しない」「本文中に記載がない」を判断します。My Reading Gymの「True/False/Not Given」問題は、IELTS対策に特化した訓練を提供し、正確な情報特定能力を鍛えます。
             </li>
             <li>
               <strong>Multiple Choice (多肢選択)</strong> - 文の要点理解や詳細情報の把握が求められます。本アプリの「4択問題」は、本文の内容を正確に理解し、最も適切な選択肢を選ぶ力を養うのに役立ちます。
@@ -88,7 +88,7 @@ export default function ExamFeaturesPage() {
           <h3 className="text-xl font-medium mb-2">特徴的な問題形式と対策</h3>
           <ul className="list-disc list-inside space-y-1">
             <li>
-              <strong>短文の語句空所補充:</strong> 文脈に合う適切な単語や熟語を選ぶ問題です。Personalized Reading Gymの「空所補充 (fill-in-the-blank)」問題は、この形式の対策に直結します。
+              <strong>短文の語句空所補充:</strong> 文脈に合う適切な単語や熟語を選ぶ問題です。My Reading Gymの「空所補充 (fill-in-the-blank)」問題は、この形式の対策に直結します。
             </li>
             <li>
               <strong>長文の語句空所補充:</strong> 長文を読みながら、文脈に合った適切な語句を選択します。本アプリの「空所補充」問題は、長文読解力を養いながら、文脈に応じた語彙力を鍛えるのに有効です。

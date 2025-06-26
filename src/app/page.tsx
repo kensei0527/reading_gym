@@ -50,7 +50,7 @@ export default function LandingPage() {
           AIが、あなただけの英語教材を。
         </h1>
         <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl">
-          Personalized Reading Gymへようこそ。あなたの学習目的、レベル、興味に合わせて、AIが無限に多読用リーディング教材を生成。もう教材選びに迷う必要はありません。
+          My Reading Gymへようこそ。あなたの学習目的、レベル、興味に合わせて、AIが無限に多読用リーディング教材を生成。もう教材選びに迷う必要はありません。
         </p>
         
         <div className="flex gap-4">
