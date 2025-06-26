@@ -78,6 +78,24 @@ export default function LandingPage() {
             <p className="text-gray-600">解答後すぐに、詳しい解説と重要単語リストで復習できます。タイマー機能を使えば、本番さながらの緊張感で学習可能です。</p>
           </div>
         </div>
+        {/* ★ ここから新しい記事へのリンクを追加 */}
+        <div className="text-center mt-12">
+          <h2 className="text-3xl font-bold mb-6 border-b pb-4">学習に役立つ情報</h2>
+          <div className="space-y-4">
+            <Link href="/exam-features" className="block text-blue-500 hover:underline text-lg">
+              英語試験（TOEIC, IELTS, TOEFL, 英検）のリーディング問題の特徴と対策
+            </Link>
+            {/* TODO: 多読の有用性に関する記事へのリンクをここに追加 */}
+            {/* <Link href="/reading-benefits" className="block text-blue-500 hover:underline text-lg">
+              多読が英語学習にもたらす驚くべき効果とは？
+            </Link> */}
+            {/* TODO: アプリが提供する生成教材の詳しい説明に関する記事へのリンクをここに追加 */}
+            {/* <Link href="/generated-materials-details" className="block text-blue-500 hover:underline text-lg">
+              AIが生成するパーソナライズ教材の秘密
+            </Link> */}
+          </div>
+        </div>
+        {/* ★ ここまで追加 */}
       </div>
     </div>
   )
